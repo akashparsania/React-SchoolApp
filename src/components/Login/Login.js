@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import './Login.css'
 import { Input } from '../../common/Input/Input'
+import { Link } from 'react-router-dom'
 
 
 const inputValues=[{
@@ -46,6 +47,7 @@ const fnChange=(eve)=>{
     let inputControlsArray=inputValues.map((obj)=>{
       return <Input  data={{...obj, fnChange}}/>        
   })
+  console.log(inputControlsArray)
   setTemp(inputControlsArray);
   }
   
@@ -69,20 +71,14 @@ const fnLogin=()=>{
 
   return (
     <div className='container-fluid'>
-       
-            <h1 className='text-center mb-4 mt-3'>Login</h1>
-       
-        {temp}
-       
-    <div className='row container-fluid mb-3'>
-      <div className='col-sm-5'> </div>
-        <div className='col-sm-2  text-start'>
-        <button onClick={fnLogin} type="button" className="btn btn-outline-dark">Login</button>
-        </div>
-        
-    </div>
-
-    
+      <h1 className='text-center mt-3 mb-4'>Login</h1>
+       {temp}
+       <div className='row '>
+        <div className='offset-sm-5 col-sm-7 pl-1 text-start'>
+         <button onClick={fnLogin} className="btn btn-outline-dark me-3">Login</button>
+         <Link to='/register'>To Register</Link>
+        </div>    
+      </div>
     </div>
   )
 }
