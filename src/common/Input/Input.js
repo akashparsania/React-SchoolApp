@@ -20,9 +20,13 @@ const prepareInputControl=()=>{
                     
                     })
                 
-
+            case 'checkbox':
+                let checkedValues=val.split(',');
+                return options.map((opt,index)=>{
+                    return <React.Fragment><input onChange={fnChange}  checked={checkedValues.includes(values[index])} name={values[index]} value={values[index]} type={type}/><b className='me-1'>{opt}</b> </React.Fragment>
                 
-                break;
+                })
+            
         }
     
 }

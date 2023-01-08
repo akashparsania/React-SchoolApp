@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './Register.css'
 import { Link } from 'react-router-dom'
 import { Input } from '../../common/Input/Input'
-
+import { Select } from '../../common/Select/Select'
+import { TextArea } from '../../common/TextArea/TextArea'
 const inputValues=[{
   lbl:'User Name',
   tag:'input',
@@ -40,7 +41,38 @@ const inputValues=[{
   options: ['Male','Female'],
   errMsg:'Please select Gender',
   isShow:false
-}]
+},
+{
+  lbl:'Hobbies',
+  tag:'input',
+  type:'checkbox',
+  name:'hobbies',
+  val:'FB,HOC' ,
+  values:['CRIC','FB','HOC'],
+  options: ['Cricket','FootBall','Hockey'],
+  errMsg:'Please select Hobbies',
+  isShow:false
+},
+{
+  lbl:'Country',
+  tag:'select',
+  name:'country',
+  val:' ',
+  values:['IND','CANA','USA'],
+  options: ['INDIA','CANADA','USA'],
+  errMsg:'Please Select Country',
+  isShow:false
+},
+{
+  lbl:'Address',
+  tag:'textarea',
+  name:'address',
+  val:'2 Silver Maple Court',
+  errMsg:'Please enter Address',
+  isShow:false
+}
+
+]
 
 export const Register = () => {
   const [temp,setTemp]=useState('');
@@ -54,9 +86,10 @@ export const Register = () => {
         case 'input':
           return <Input data={{...obj,fnChange}}/>
         case'select':
-        return
+        return <Select data={{...obj,fnChange}}></Select>
         case 'textarea':
-        return
+        return <TextArea data={{...obj,fnChange}}></TextArea>
+        
 
       }
     })
