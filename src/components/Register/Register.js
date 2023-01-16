@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom'
 import { Input } from '../../common/Input/Input'
 import { Select } from '../../common/Select/Select'
 import { TextArea } from '../../common/TextArea/TextArea'
+import { regFormValidations } from '../../validations/regFormValidations'
+import { ServerCall } from '../../shared/ServerCall'
+import { toast } from 'react-toastify'
 const inputValues=[{
   lbl:'User Name',
   tag:'input',
   type:'text',
   name:'uid',
-  val:'akash',
-  errMsg:'Please enter User ID',
+  val:'',
+  errMsg:'',
   isShow:false
 },
 {
@@ -18,8 +21,8 @@ const inputValues=[{
   tag:'input',
   type:'password',
   name:'pwd',
-  val:'123',
-  errMsg:'Please enter Password',
+  val:'',
+  errMsg:'',
   isShow:false
 },
 {
@@ -27,8 +30,8 @@ const inputValues=[{
   tag:'input',
   type:'number',
   name:'phone',
-  val:'6488975678',
-  errMsg:'Please enter Phone Number',
+  val:'',
+  errMsg:'',
   isShow:false
 },
 {
@@ -36,10 +39,10 @@ const inputValues=[{
   tag:'input',
   type:'radio',
   name:'gender',
-  val:'M',
+  val:'',
   values:['M','F'],
   options: ['Male','Female'],
-  errMsg:'Please select Gender',
+  errMsg:'',
   isShow:false
 },
 {
@@ -47,28 +50,30 @@ const inputValues=[{
   tag:'input',
   type:'checkbox',
   name:'hobbies',
-  val:'FB,HOC' ,
+  val:'' ,
   values:['CRIC','FB','HOC'],
   options: ['Cricket','FootBall','Hockey'],
-  errMsg:'Please select Hobbies',
+  errMsg:'',
   isShow:false
 },
 {
   lbl:'Country',
   tag:'select',
+  
   name:'country',
-  val:' ',
+  val:'',
   values:['IND','CANA','USA'],
   options: ['INDIA','CANADA','USA'],
-  errMsg:'Please Select Country',
+  errMsg:'',
   isShow:false
 },
 {
   lbl:'Address',
   tag:'textarea',
+  type:'textarea',
   name:'address',
-  val:'2 Silver Maple Court',
-  errMsg:'Please enter Address',
+  val:'',
+  errMsg:'',
   isShow:false
 }
 
@@ -81,7 +86,7 @@ export const Register = () => {
     fnPrepareTemplate();
   },[])
   const fnPrepareTemplate=()=>{
-    let inputControlsArray=inputValues.map((obj,index)=>{
+    let inputControlsArray=inputValues.map((obj)=>{
       switch(obj.tag){
         case 'input':
           return <Input data={{...obj,fnChange}}/>
@@ -93,18 +98,105 @@ export const Register = () => {
 
       }
     })
+    
     setTemp(inputControlsArray)
 
   }
-  const fnChange=()=>{
+  const fnChange=(eve)=>{
+      
+      const {name,value,type,checked,id}=eve.target;
+      //console.log(eve.target);
+     let inputObj= inputValues.find((obj)=>{
+      
+       return  obj.name==name
+      
+      })
+    
+      if(type=='checkbox'){
+        let selHobbies=[]
+        if(inputObj.val){
+          selHobbies=inputObj.val.split(',')
+        }
+        if(checked){
+          selHobbies.push(id)
+        
+          
+          
+        }
+        else{
+          selHobbies.splice(selHobbies.indexOf(id),1);
 
+
+        }
+        inputObj.val=selHobbies.join();
+        
+      }else{
+      inputObj.val=value;
+      
+      }
+      
+      regFormValidations(inputObj);
+      fnPrepareTemplate()
+     
+      //inputObj.isShow=value ? false : true
+      
+    
+    
+      
+    
   }
 
   
 
   const fnRegister=()=>{
+    //url:https://serverapp.herokuapp.com/reg/reg-std
+    //method:post
+    //data format: { payload:{}   }
+    
+let isFormValid=true;
+let data={};
+    inputValues.forEach((inputObj)=>{
 
-   
+      regFormValidations(inputObj)
+
+      const{name,val,errMsg}=inputObj;
+      
+      data[name]=val;
+      
+      
+      if(errMsg){
+        isFormValid=false;
+      }
+    })
+    fnPrepareTemplate();
+    if(!isFormValid) return
+              
+              ServerCall.sendPost('reg/reg-std',{payload:data}) 
+              .then((res)=>{
+                console.log(res)
+                const{acknowledged,insertedId}=res.data
+                if(acknowledged&&insertedId){
+                  toast.success('Registration Successful')
+                  inputValues.forEach((inputObj)=>{
+                    
+                    inputObj.val=''
+                    inputObj.errMsg=''
+                    inputObj.isShow=false
+                    
+                    
+                  })
+                  fnPrepareTemplate();
+                }
+                else{
+                  toast.error('TRY AGIAN')
+                }
+
+              })
+              .catch((err)=>{
+                toast.error('Something Went Wrong')
+              })
+
+
   }
 
 

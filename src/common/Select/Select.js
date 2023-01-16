@@ -17,10 +17,10 @@ export const Select = (props) => {
     
             <div className='col-sm-2 text-start '>
               <select name={name} onChange={fnChange} className='form-control'>
-              <option>Please select Country</option>
+               <option value=''>Please select Country</option> 
                 {   
                     options.map((opt,index)=>{
-                        return <option key={index}>{opt}</option>
+                        return <option selected={val==values[index]} value={values[index]} key={index}>{opt}</option>
                     })
                 }
               </select>

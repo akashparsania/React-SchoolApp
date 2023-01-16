@@ -8,14 +8,14 @@ const inputValues=[{
     lbl:'User Name',
     type:'text',
     name:'uid',
-    val:'',
+    val:'akas',
     errMsg:'Please enter User ID',
     isShow:false
 },{
     lbl:'Password',
     type:'password',
     name:'pwd',
-    val:'',
+    val:'pd',
     errMsg:'Please enter Password',
     isShow:false
 }]

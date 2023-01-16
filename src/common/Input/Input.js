@@ -1,18 +1,20 @@
 import React from 'react'
 import './Input.css'
-export const Input = (props) => {
+export const Input = (prop) => {
    
-const {data}=props;
+const {data}=prop;
 const {type,name,lbl,fnChange,val,errMsg,isShow,values,options}=data;
- 
+
 const prepareInputControl=()=>{
     
         switch(type){
             case 'text':
+                return  <input onChange={fnChange} className='form-control' name={name} value={val} type={type}/>
             case 'password':
+                return  <input onChange={fnChange} className='form-control' name={name} value={val} type={type}/>
             case 'number': 
                 return  <input onChange={fnChange} className='form-control' name={name} value={val} type={type}/>
-            
+            break;
             
             case 'radio':
                    return options.map((opt,index)=>{
@@ -23,7 +25,7 @@ const prepareInputControl=()=>{
             case 'checkbox':
                 let checkedValues=val.split(',');
                 return options.map((opt,index)=>{
-                    return <React.Fragment><input onChange={fnChange}  checked={checkedValues.includes(values[index])} name={values[index]} value={values[index]} type={type}/><b className='me-1'>{opt}</b> </React.Fragment>
+                    return <React.Fragment><input onChange={fnChange}  checked={checkedValues.includes(values[index])} name={name} id={values[index]} value={values[index]} type={type}/><b className='me-1'>{opt}</b> </React.Fragment>
                 
                 })
             
